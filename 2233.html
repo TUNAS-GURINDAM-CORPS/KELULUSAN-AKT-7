@@ -131,10 +131,7 @@
         -webkit-text-fill-color: transparent;
         background-clip: text;
       }
-      .countdown {
-        font-size: 2rem;
-        font-weight: bold;
-        color: #e53e3e;
+      .countdown-container {
         margin: 1rem 0;
         padding: 1rem;
         background: linear-gradient(
@@ -153,7 +150,116 @@
         -webkit-backdrop-filter: blur(5px);
         box-shadow: 0 4px 15px rgba(229, 62, 62, 0.1),
           inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .countdown-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+        animation: countdownShimmer 4s ease-in-out infinite;
+        pointer-events: none;
+      }
+
+      .countdown-timer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.8rem;
+        margin-bottom: 0.5rem;
+        flex-wrap: wrap;
+        position: relative;
+        z-index: 1;
+      }
+
+      .time-unit {
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.95) 0%,
+            rgba(255, 255, 255, 0.85) 100%
+          ),
+          linear-gradient(
+            45deg,
+            rgba(255, 215, 0, 0.1) 0%,
+            rgba(255, 215, 0, 0.05) 100%
+          );
+        border-radius: 10px;
+        padding: 0.8rem 0.6rem;
+        min-width: 60px;
+        text-align: center;
+        border: 2px solid rgba(255, 215, 0, 0.5);
+        border-bottom: 3px solid rgba(255, 215, 0, 0.6);
+        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.25),
+          inset 0 2px 4px rgba(255, 255, 255, 0.8),
+          0 2px 8px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+        animation: timeUnitFloat 6s ease-in-out infinite;
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+      }
+
+      .time-unit:nth-child(1) { animation-delay: 0s; }
+      .time-unit:nth-child(2) { animation-delay: 0.5s; }
+      .time-unit:nth-child(3) { animation-delay: 1s; }
+      .time-unit:nth-child(4) { animation-delay: 1.5s; }
+
+      .time-unit::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.1), transparent);
+        animation: timeUnitShine 8s ease-in-out infinite;
+      }
+
+      .time-value {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #1a365d;
+        display: block;
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        line-height: 1;
+        position: relative;
+        z-index: 1;
+        font-family: 'Courier New', monospace;
+      }
+
+      .time-label {
+        font-size: 0.7rem;
+        color: #4a5568;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 0.3rem;
+        position: relative;
+        z-index: 1;
+        background: rgba(255, 215, 0, 0.1);
+        padding: 0.15rem 0.3rem;
+        border-radius: 3px;
+        border: 1px solid rgba(255, 215, 0, 0.2);
+      }
+
+      @keyframes timeUnitFloat {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-5px); }
+      }
+
+      @keyframes timeUnitShine {
+        0%, 100% { left: -100%; }
+        50% { left: 100%; }
+      }
+
+      @keyframes countdownShimmer {
+        0%, 100% { transform: translateX(-100%); opacity: 0; }
+        50% { transform: translateX(100%); opacity: 1; }
       }
       .button {
         display: inline-block;
@@ -357,11 +463,29 @@
           line-height: 1.3;
         }
 
-        .countdown {
-          font-size: 1.8rem;
+        .countdown-container {
           padding: 0.8rem;
           margin: 0.8rem 0;
           border-radius: 8px;
+        }
+
+        .countdown-timer {
+          gap: 0.6rem;
+        }
+
+        .time-unit {
+          min-width: 50px;
+          padding: 0.6rem 0.4rem;
+        }
+
+        .time-value {
+          font-size: 1.2rem;
+        }
+
+        .time-label {
+          font-size: 0.6rem;
+          margin-top: 0.25rem;
+          padding: 0.12rem 0.25rem;
         }
 
         .button {
@@ -425,10 +549,24 @@
           margin-bottom: 0.5rem;
         }
 
-        .countdown {
-          font-size: 1.6rem;
+        .countdown-container {
           padding: 0.6rem;
           margin: 0.6rem 0;
+        }
+
+        .time-unit {
+          min-width: 45px;
+          padding: 0.5rem 0.3rem;
+        }
+
+        .time-value {
+          font-size: 1rem;
+        }
+
+        .time-label {
+          font-size: 0.5rem;
+          margin-top: 0.2rem;
+          padding: 0.1rem 0.2rem;
         }
 
         .button {
@@ -449,9 +587,21 @@
           max-width: 90%;
         }
 
-        .countdown {
-          font-size: 2.2rem;
+        .countdown-container {
           padding: 1rem;
+        }
+
+        .time-unit {
+          min-width: 65px;
+          padding: 0.7rem 0.5rem;
+        }
+
+        .time-value {
+          font-size: 1.3rem;
+        }
+
+        .time-label {
+          font-size: 0.65rem;
         }
 
         .button {
@@ -476,9 +626,11 @@
     <div class="container">
       <h1>Selamat Datang</h1>
       <p>Halaman ini akan membuka akses ke TUNAS GURINDAM</p>
-      <div class="countdown" id="countdown">Menghitung...</div>
+      <div class="countdown-container">
+        <div class="countdown-timer" id="countdown">Menghitung...</div>
+      </div>
       <div class="message" id="message">Menunggu waktu pengumuman...</div>
-      <a href="https://tunas-gurindam-corps.github.io/KELULUSAN/TUNAS%20GURINDAM.html" class="button" id="accessButton"
+      <a href="TUNAS GURINDAM.html" class="button" id="accessButton"
         >Akses Belum Tersedia</a
       >
     </div>
@@ -510,7 +662,20 @@
         const buttonElement = document.getElementById("accessButton");
 
         if (!releaseDate) {
-          countdownElement.textContent = "--:--:--";
+          countdownElement.innerHTML = `
+            <div class="time-unit">
+              <span class="time-value">--</span>
+              <span class="time-label">Jam</span>
+            </div>
+            <div class="time-unit">
+              <span class="time-value">--</span>
+              <span class="time-label">Menit</span>
+            </div>
+            <div class="time-unit">
+              <span class="time-value">--</span>
+              <span class="time-label">Detik</span>
+            </div>
+          `;
           messageElement.textContent = "Waktu belum ditentukan";
           return;
         }
@@ -555,15 +720,43 @@
           );
           const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
-          let countdownText = "";
-          if (days > 0) {
-            countdownText += `${days} hari `;
-          }
-          countdownText += `${hours.toString().padStart(2, "0")}:${minutes
-            .toString()
-            .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+          // Create countdown display with separate units
+          countdownElement.innerHTML = '';
 
-          countdownElement.textContent = countdownText;
+          if (days > 0) {
+            const daysUnit = document.createElement('div');
+            daysUnit.className = 'time-unit';
+            daysUnit.innerHTML = `
+              <span class="time-value">${days}</span>
+              <span class="time-label">Hari</span>
+            `;
+            countdownElement.appendChild(daysUnit);
+          }
+
+          const hoursUnit = document.createElement('div');
+          hoursUnit.className = 'time-unit';
+          hoursUnit.innerHTML = `
+            <span class="time-value">${hours.toString().padStart(2, '0')}</span>
+            <span class="time-label">Jam</span>
+          `;
+          countdownElement.appendChild(hoursUnit);
+
+          const minutesUnit = document.createElement('div');
+          minutesUnit.className = 'time-unit';
+          minutesUnit.innerHTML = `
+            <span class="time-value">${minutes.toString().padStart(2, '0')}</span>
+            <span class="time-label">Menit</span>
+          `;
+          countdownElement.appendChild(minutesUnit);
+
+          const secondsUnit = document.createElement('div');
+          secondsUnit.className = 'time-unit';
+          secondsUnit.innerHTML = `
+            <span class="time-value">${seconds.toString().padStart(2, '0')}</span>
+            <span class="time-label">Detik</span>
+          `;
+          countdownElement.appendChild(secondsUnit);
+
           messageElement.textContent = "Menunggu waktu pengumuman kelulusan...";
         }, 1000);
       }
@@ -575,4 +768,3 @@
     </script>
   </body>
 </html>
-
