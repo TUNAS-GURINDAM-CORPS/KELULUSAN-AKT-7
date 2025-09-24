@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cek Kelulusan - Tunas Gurindam Corps</title>
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        text-align: center;
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      .container {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+        padding: 20px;
+        max-width: 500px;
+        width: 95%;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        position: relative;
+        z-index: 2;
+      }
+
+      .container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
+        border-radius: 20px 20px 0 0;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes titleShine {
+        from {
+          text-shadow:
+            0 3px 6px rgba(0, 0, 0, 0.4),
+            0 0 30px rgba(255, 255, 255, 0.3);
+        }
+        to {
+          text-shadow:
+            0 3px 6px rgba(0, 0, 0, 0.4),
+            0 0 40px rgba(255, 255, 255, 0.5),
+            0 0 60px rgba(251, 191, 36, 0.3),
+            0 0 100px rgba(138, 43, 226, 0.15);
+        }
+      }
+
+      @keyframes emojiFloat {
+        0%, 100% { transform: translateY(-50%) scale(1); }
+        50% { transform: translateY(-50%) scale(1.2); }
+      }
+
+      @keyframes logoRotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
+      @keyframes logoPulse {
+        from { opacity: 0.4; }
+        to { opacity: 0.8; }
+      }
+
+      @keyframes rainbowBorder {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
+      /* Check particle effects */
+      .check-particles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 1;
+      }
+
+      .check-particle {
+        position: absolute;
+        background: radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(138,43,226,0.5) 50%, transparent 100%);
+        border-radius: 50%;
+        animation: checkParticleFloat 16s linear infinite;
+      }
+
+      .check-particle:nth-child(1) { width: 4px; height: 4px; top: 12%; left: 12%; animation-delay: 0s; }
+      .check-particle:nth-child(2) { width: 6px; height: 6px; top: 22%; left: 78%; animation-delay: 2s; }
+      .check-particle:nth-child(3) { width: 3px; height: 3px; top: 58%; left: 22%; animation-delay: 4s; }
+      .check-particle:nth-child(4) { width: 5px; height: 5px; top: 78%; left: 68%; animation-delay: 6s; }
+      .check-particle:nth-child(5) { width: 4px; height: 4px; top: 38%; left: 88%; animation-delay: 8s; }
+      .check-particle:nth-child(6) { width: 7px; height: 7px; top: 68%; left: 32%; animation-delay: 10s; }
+      .check-particle:nth-child(7) { width: 3px; height: 3px; top: 48%; left: 58%; animation-delay: 12s; }
+      .check-particle:nth-child(8) { width: 5px; height: 5px; top: 88%; left: 42%; animation-delay: 14s; }
+
+      @keyframes checkParticleFloat {
+        0% {
+          transform: translateY(0px) translateX(0px) scale(1);
+          opacity: 0.5;
+        }
+        25% {
+          transform: translateY(-18px) translateX(12px) scale(1.2);
+          opacity: 0.8;
+        }
+        50% {
+          transform: translateY(-36px) translateX(-12px) scale(0.8);
+          opacity: 0.6;
+        }
+        75% {
+          transform: translateY(-18px) translateX(8px) scale(1.1);
+          opacity: 0.9;
+        }
+        100% {
+          transform: translateY(-54px) translateX(0px) scale(1);
+          opacity: 0.5;
+        }
+      }
+
+      .logo-circle {
+        width: 120px;
+        height: 120px;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        margin: 0 auto 20px auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+        position: relative;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+      }
+
+      @keyframes logoFloat {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-5px);
+        }
+      }
+
+      .logo-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        line-height: 1.3;
+        background: linear-gradient(135deg, #ffffff 0%, #fbbf24 50%, #ffffff 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+        font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+      }
+
+      h1::before {
+        content: '🎓';
+        position: absolute;
+        left: -25px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1rem;
+        opacity: 0.7;
+      }
+
+      h1::after {
+        content: '🎓';
+        position: absolute;
+        right: -25px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1rem;
+        opacity: 0.7;
+      }
+
+      .subtitle {
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 2.5rem;
+        line-height: 1.5;
+        font-weight: 400;
+      }
+
+      .form-group {
+        margin-bottom: 2.5rem;
+        position: relative;
+      }
+
+      label {
+        display: block;
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: rgba(255, 255, 255, 0.95);
+        text-align: left;
+      }
+
+      .input-wrapper {
+        position: relative;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        padding: 14px 16px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-size: 1rem;
+        outline: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      input[type="text"]::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+        font-weight: 400;
+      }
+
+      input[type="text"]:focus {
+        border-color: #fbbf24;
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 6px 20px rgba(251, 191, 36, 0.2);
+      }
+
+      input[type="text"]:hover {
+        border-color: rgba(255, 255, 255, 0.4);
+      }
+
+      .input-icon {
+        position: absolute;
+        right: 1.2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 1.2rem;
+        pointer-events: none;
+      }
+
+      .buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+        align-items: center;
+      }
+
+      button,
+      a {
+        background:
+          linear-gradient(135deg, #667eea 0%, #764ba2 50%, #8b5cf6 100%),
+          linear-gradient(45deg, rgba(255,255,255,0.15) 0%, rgba(138,43,226,0.1) 50%, transparent 100%),
+          linear-gradient(90deg, rgba(255,255,255,0.05) 0%, transparent 50%, rgba(255,255,255,0.03) 100%);
+        color: white;
+        padding: 1.2rem 2.8rem;
+        text-decoration: none;
+        border-radius: 18px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow:
+          0 8px 25px rgba(102, 126, 234, 0.5),
+          0 0 0 2px rgba(255, 255, 255, 0.15),
+          0 0 0 4px rgba(255, 255, 255, 0.08),
+          inset 0 2px 0 rgba(255, 255, 255, 0.2);
+        display: inline-block;
+        min-width: 240px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      button::before,
+      a::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.6s;
+      }
+
+      button:hover::before,
+      a:hover::before {
+        left: 100%;
+      }
+
+      button::before,
+      a::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.6s;
+      }
+
+      button::after,
+      a::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+      }
+
+      button:hover::before,
+      a:hover::before {
+        left: 100%;
+      }
+
+      button:hover::after,
+      a:hover::after {
+        width: 300px;
+        height: 300px;
+      }
+
+      button:hover,
+      a:hover {
+        background:
+          linear-gradient(135deg, #5a67d8 0%, #6b46c1 30%, #8b5cf6 70%, #a855f7 100%),
+          linear-gradient(45deg, rgba(255,255,255,0.2) 0%, rgba(138,43,226,0.15) 50%, transparent 100%),
+          linear-gradient(90deg, rgba(255,255,255,0.08) 0%, transparent 50%, rgba(255,255,255,0.05) 100%);
+        box-shadow:
+          0 15px 40px rgba(102, 126, 234, 0.7),
+          0 0 0 4px rgba(255, 255, 255, 0.25),
+          0 0 0 8px rgba(255, 255, 255, 0.1),
+          0 0 0 12px rgba(138, 43, 226, 0.15),
+          inset 0 3px 0 rgba(255, 255, 255, 0.3);
+        transform: translateY(-6px) scale(1.05) rotateX(5deg);
+        border-color: rgba(255, 255, 255, 0.3);
+        filter: brightness(1.1) contrast(1.05);
+      }
+
+      button:active,
+      a:active {
+        transform: translateY(-3px) scale(1.02) rotateX(2deg);
+        box-shadow:
+          0 8px 20px rgba(102, 126, 234, 0.5),
+          0 0 0 2px rgba(255, 255, 255, 0.2),
+          inset 0 2px 0 rgba(255, 255, 255, 0.2);
+        filter: brightness(0.95) contrast(0.95);
+      }
+
+      .error {
+        color: #fca5a5;
+        font-size: 0.95rem;
+        margin-top: 0.8rem;
+        display: none;
+        background: rgba(239, 68, 68, 0.1);
+        padding: 0.8rem 1rem;
+        border-radius: 12px;
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        animation: shake 0.5s ease-in-out;
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px);
+        }
+        75% {
+          transform: translateX(5px);
+        }
+      }
+
+      .success {
+        color: #86efac;
+        font-size: 0.95rem;
+        margin-top: 0.8rem;
+        display: none;
+        background: rgba(34, 197, 94, 0.1);
+        padding: 0.8rem 1rem;
+        border-radius: 12px;
+        border: 1px solid rgba(34, 197, 94, 0.2);
+      }
+
+      /* Tablet and larger screens */
+      @media (min-width: 768px) {
+        .container {
+          max-width: 600px;
+          padding: 30px;
+        }
+
+        h1 {
+          font-size: 2.2rem;
+        }
+
+        .logo-circle {
+          width: 140px;
+          height: 140px;
+        }
+
+        input[type="text"] {
+          padding: 1.2rem 1.6rem;
+          font-size: 1rem;
+        }
+
+        button, a {
+          padding: 1.2rem 2.4rem;
+          min-width: 220px;
+          font-size: 1rem;
+        }
+      }
+
+      /* Large screens */
+      @media (min-width: 1024px) {
+        .container {
+          max-width: 700px;
+        }
+      }
+
+      /* Mobile performance optimizations */
+      @media (max-width: 768px) {
+        body {
+          background-attachment: scroll;
+        }
+
+        .container {
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
+        }
+
+        .logo-circle {
+          animation: none;
+        }
+
+        h1 {
+          animation: none;
+        }
+
+        button,
+        a {
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
+          animation: none;
+        }
+
+        /* Force hardware acceleration */
+        * {
+          -webkit-transform: translateZ(0);
+          transform: translateZ(0);
+        }
+      }
+
+      /* Loading animation for form submission */
+      .loading {
+        position: relative;
+        color: transparent;
+      }
+
+      .loading::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 20px;
+        height: 20px;
+        margin: -10px 0 0 -10px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top: 2px solid white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Background Music -->
+    <audio id="bg-music" autoplay loop preload="metadata" style="display: none;">
+      <source src="ROYALTY FREE Awards Background Music Nomination Royalty Free Music Awards Royalty Free Music.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+
+
+    <div class="container">
+      <div class="logo-circle">
+        <img
+          src="242104513_266398215333645_4612524844173446882_n.jpg"
+          alt="Logo TGC"
+          class="logo-image"
+          loading="lazy"
+        />
+      </div>
+      <h1>🎓 Cek Status Kelulusan</h1>
+      <p class="subtitle">
+        Masukkan nama lengkap atau ID peserta Anda untuk melihat hasil kelulusan
+      </p>
+
+      <form id="cek-form">
+        <div class="form-group">
+          <label for="input">Nama Lengkap atau ID Peserta:</label>
+          <div class="input-wrapper">
+            <input
+              type="text"
+              id="input"
+              name="input"
+              placeholder="Contoh: AHMAD atau TGC00001"
+              required
+              autocomplete="off"
+            />
+            <span class="input-icon">👤</span>
+          </div>
+          <div class="error" id="error">
+            Data tidak ditemukan. Pastikan nama atau ID sudah benar.
+          </div>
+          <div class="success" id="success">Data ditemukan! Mengalihkan...</div>
+        </div>
+
+        <div class="buttons">
+          <button type="submit" id="submit-btn">🔍 Cek Kelulusan</button>
+          <a href="index.html">🏠 Kembali ke Pengumuman</a>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      // Student data (same as in student-detail.html)
+      let students = {};
+
+      // Load students from localStorage
+      function loadStudentsFromStorage() {
+        const saved = localStorage.getItem("tunasGurindamStudents");
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          Object.keys(students).forEach((key) => delete students[key]);
+          Object.assign(students, parsed);
+        } else {
+          students = {
+            TGC00001: { nama: "ASSYIFA ZEVANA ARWINI", status: "LULUS" },
+           TGC00002: { nama: "NIKEN AYU", status: "LULUS" },
+           TGC00003: { nama: "M. HAMIZAN IHSAN FADILLAH", status: "LULUS" },
+           TGC00004: { nama: "FATIHAH ZHAFIRAH FALLAH", status: "LULUS" },
+           TGC00005: { nama: "KEYLA AISYAH HENDRA", status: "LULUS" },
+           TGC00006: { nama: "DAVIN CANVARO SIMBOLON", status: "LULUS" },
+           TGC00007: { nama: "SETIAWAN ADE SAPUTRA", status: "TIDAK LULUS" },
+           TGC00008: { nama: "SALWA RAHMATUN NAZILA", status: "LULUS" },
+           TGC00009: { nama: "KEVIN AL FINO", status: "LULUS" },
+           TGC00010: { nama: "AZARINE EDGINA WISONO", status: "LULUS" },
+           TGC00011: { nama: "RAHSYAIDINA PANJAITAN", status: "LULUS" },
+           TGC00012: { nama: "SHAFIRA AZZAHRA PUTRI", status: "LULUS" },
+           TGC00013: { nama: "SITI RAEESA RAMAPUTRI", status: "LULUS" },
+           TGC00014: { nama: "SHEANANDRAKARELLINA", status: "LULUS" },
+           TGC00015: { nama: "MUTIARA ANGGARAINI PUTRI", status: "LULUS" },
+           TGC00016: { nama: "MUHAMMAD RADIKA A.F", status: "LULUS" },
+           TGC00017: { nama: "LUTHFI ARFA PRATAMA", status: "LULUS" },
+           TGC00018: { nama: "PINKY AYU WULANDARI", status: "LULUS" },
+           TGC00019: { nama: "FAZIRA NAYRA RAMADANI", status: "LULUS" },
+           TGC00020: { nama: "INDAH PERMATA DEWI", status: "TIDAK LULUS" },
+           TGC00021: { nama: "M.SYAFIQ AKBHAR", status: "LULUS" },
+           TGC00022: { nama: "TRI ALTA OKTO SYAHPUTRA", status: "LULUS" },
+           TGC00023: { nama: "M.ANAIKIN SHAH DANISY", status: "TIDAK LULUS" },
+           TGC00024: { nama: "MARSHANDY WINATA", status: "TIDAK LULUS" },
+           TGC00025: { nama: "SEKAR WIDIYA", status: "TIDAK LULUS" },
+           TGC00026: { nama: "HAFSAH ZAIMAH HUSNAH", status: "LULUS" },
+           TGC00027: { nama: "KAZURA ROFINI", status: "LULUS" },
+           TGC00028: { nama: "KINDY RAZASSENTUSY ENDEE", status: "LULUS" },
+           TGC00029: { nama: "NHELIA RAHMADINA", status: "TIDAK LULUS" },
+           TGC00030: { nama: "DEA ANANDITA", status: "LULUS" },
+           TGC00031: { nama: "IRELAND AQILLA ALVAROZIQQY", status: "TIDAK LULUS" },
+           TGC00032: { nama: "YHARA PRIAYU ANDITA", status: "TIDAK LULUS" },
+           TGC00033: { nama: "FAIZ SYAHZIQRO KUNAWI", status: "LULUS" },
+           TGC00034: { nama: "RADISTY PUTRI ANINDYA", status: "LULUS" },
+           TGC00035: { nama: "ELWIYA HARUM MURAWICA", status: "LULUS" },
+           TGC00036: { nama: "KEENAR AQILASYA QUINARA", status: "TIDAK LULUS" },
+           TGC00037: { nama: "PUTRI NIZA HAYATI", status: "LULUS" },
+           TGC00038: { nama: "KHAIRUNNISA SALSABILA", status: "LULUS" },
+           TGC00039: { nama: "VANILLA SASHA ALVIOLETA", status: "TIDAK LULUS" },
+           TGC00040: { nama: "MUHAMMAD AGIEL ALENDA", status: "LULUS" },
+           TGC00041: { nama: "JASMINE ADZKHIA PUTRI", status: "LULUS" },
+           TGC00042: { nama: "AQILA SYARASIFA SATIA", status: "LULUS" },
+           TGC00043: { nama: "MAGHFIRA ZULIA BILQIS", status: "LULUS" },
+           TGC00044: { nama: "KAZIRA ROFINA", status: "LULUS" },
+           TGC00045: { nama: "RAHMAN HAMZAH HARAHAP", status: "LULUS" },
+           TGC00046: { nama: "FIDORA HARIANI LAIA", status: "TIDAK LULUS" },
+           TGC00047: { nama: "FRANSISKA AMANDA GISELLE SIM", status: "TIDAK LULUS" },
+           TGC00048: { nama: "ADE NAFISAH RISKIA WIJAYANTI", status: "LULUS" },
+           TGC00049: { nama: "YOWELLANANDA", status: "LULUS" },
+           TGC00050: { nama: "RANGGA WICAKSANA", status: "LULUS" },
+           TGC00051: { nama: "THARIQ DZAKI AKRAM", status: "LULUS" },
+           TGC00052: { nama: "AULIA KHAIRUNNISA", status: "TIDAK LULUS" },
+           TGC00053: { nama: "FIKRI RAHMAT HAKIM", status: "LULUS" },
+           TGC00054: { nama: "FARADISYA KANZA RIZQINA", status: "LULUS" },
+           TGC00055: { nama: "NOVELITA", status: "LULUS" },
+           TGC00056: { nama: "NAQURA TEJA CANTIDHARMA", status: "LULUS" },
+           TGC00057: { nama: "NUR ADILLAH", status: "LULUS" },
+           TGC00058: { nama: "GIVI LAUDYA QONITAH", status: "LULUS" },
+           TGC00059: { nama: "RAISSA ALYA SAFIQHA", status: "LULUS" },
+           TGC00060: { nama: "WIYOLA EVELLIN UTAMI", status: "TIDAK LULUS" },
+           TGC00061: { nama: "YUZAL ZAHRA SALSA BILA", status: "LULUS" },
+           TGC00062: { nama: "GHARISSA ALMIRA ARIFIN", status: "LULUS" },
+           TGC00063: { nama: "NURYANABELLA", status: "TIDAK LULUS" },
+           TGC00064: { nama: "NAUFAL FAKHRUL ALFARISI", status: "LULUS" },
+           TGC00065: { nama: "AISYAH HUMAIRAH", status: "LULUS" },
+           TGC00066: { nama: "RAHIM HAMZAH HARAHAP", status: "LULUS" },
+           TGC00067: { nama: "ALIFA CAHAYA NIKITA", status: "LULUS" },
+           TGC00068: { nama: "DHIKA ADITYAH", status: "LULUS" },
+           TGC00069: { nama: "SYARIFAH ADYA SHAVA", status: "LULUS" },
+           TGC00070: { nama: "NAYLA AZZAHRA LYOVA", status: "LULUS" },
+           TGC00071: { nama: "NADIA ALFIAH DIANTORO", status: "LULUS" },
+           TGC00072: { nama: "IBRAHIM AL FHARIZIE", status: "LULUS" },
+           TGC00073: { nama: "QUEENI GLADYS RIAUFANI", status: "LULUS" },
+           TGC00074: { nama: "AFIQA RAMADHANI", status: "LULUS" },
+           TGC00075: { nama: "JAUZAA", status: "LULUS" },
+           TGC00076: { nama: "RADHITYA JAVAS ANGGARA", status: "LULUS" },
+           TGC00077: { nama: "WAN GUSTI FITRA ARB'INNURRIZ", status: "LULUS" },
+           TGC00078: { nama: "M. RIZKY BINTAN ZULIA PUTRA", status: "LULUS" },
+           TGC00079: { nama: "DHIWA SYABIL ARSAKHA", status: "LULUS" },
+           TGC00080: { nama: "CRISTIAN GUNAWAN IVONKOV", status: "LULUS" },
+           TGC00081: { nama: "RAINNESHA", status: "LULUS" },
+           TGC00082: { nama: "MUHAMMAD JUNESA ILHAM", status: "LULUS" },
+           TGC00083: { nama: "AQILA MUTIARA KENCANA", status: "LULUS" },
+           TGC00084: { nama: "FANESYA WATIARINI", status: "LULUS" },
+           TGC00085: { nama: "DAFFA FARUREZI", status: "TIDAK LULUS" },
+           TGC00086: { nama: "NUR ALISA", status: "LULUS" },
+           TGC00087: { nama: "RAYLA NABILA ALIANY", status: "TIDAK LULUS" },
+           TGC00088: { nama: "ADIKA GUNAWAN", status: "LULUS" },
+           TGC00089: { nama: "AZAHIRA JAUVA FANO", status: "LULUS" },
+           TGC00090: { nama: "ANDIKA PRASTIA EKA", status: "LULUS" },
+           TGC00091: { nama: "TIFANIA TAMA", status: "TIDAK LULUS" },
+           TGC00092: { nama: "FANI DWI OKTA VINDA", status: "LULUS" },
+           TGC00093: { nama: "MERRY CRYSMES", status: "LULUS" },
+           TGC00094: { nama: "FRISTI HELLDY OKTAVIYANI", status: "TIDAK LULUS" },
+           TGC00095: { nama: "NURFADILLAH PRATIWI", status: "TIDAK LULUS" },
+           TGC00096: { nama: "SHALSABILLA", status: "LULUS" },
+           TGC00097: { nama: "NAILA PUTRI DWIMA", status: "LULUS" },
+            TGC00098: { nama: "ABDUL HADI", status: "LULUS" },
+            TGC00099: { nama: "AZUMI RAMADHANI", status: "LULUS" },
+            TGC00100: { nama: "KEYZA KARELLINA", status: "LULUS" },
+            TGC00101: { nama: "HAYRA FATIKA SARI", status: "LULUS" },
+            TGC00102: { nama: "MUHAMAD JAMIL SAMPURNO", status: "LULUS" },
+            TGC00103: { nama: "DINDA ARDILA", status: "LULUS" },
+            TGC00104: { nama: "SHIVA RUBY AISYAH YANUWIARSO", status: "LULUS" },
+            TGC00105: { nama: "RATU AZILLA RASYAD", status: "LULUS" },
+            TGC00106: { nama: "MECCA CHAIRUNISA AURITA", status: "LULUS" },
+            TGC00107: { nama: "RIZKI EMERALD AZZURRI", status: "LULUS" },
+            TGC00108: { nama: "ADELLIA WATI SENGKO", status: "LULUS" },
+            TGC00109: { nama: "NAYSHILA AULIA PUTRI", status: "LULUS" },
+            TGC00110: { nama: "GRACIA NADINE JOVANA SAGALA", status: "LULUS" },
+            TGC00111: { nama: "MUHAMAD ALDIAN", status: "LULUS" },
+            TGC00112: { nama: "DAFFA ARRIDHO", status: "LULUS" },
+            TGC00113: { nama: "NAURA SYABIYA HEVIZA", status: "LULUS" },
+            TGC00114: { nama: "KEYSYA PUTRI AULIA", status: "LULUS" },
+            TGC00115: { nama: "ZIANDRA NUGRAH PRATAMA", status: "LULUS" },
+            TGC00116: { nama: "RATU BALQIS PUTE", status: "LULUS" },
+            TGC00117: { nama: "ENJILITA ALIFA RAMADHANI", status: "LULUS" },
+            TGC00118: { nama: "REVANDA PUTRA DWI ANDERA", status: "LULUS" },
+            TGC00119: { nama: "FITO MUHAMAD SIDEK", status: "LULUS" },
+            TGC00120: { nama: "BENING CAHYA LIANY SIREGAR", status: "LULUS" },
+            TGC00121: { nama: "M.NAUFAL PANDU WINATA", status: "LULUS" },
+            TGC00122: { nama: "LARASATI BAHRIA", status: "LULUS" },
+            TGC00123: { nama: "AUDREY BATRISYA QAIREEN", status: "LULUS" },
+            TGC00124: { nama: "FERDIAN KHALIK", status: "LULUS" },
+            TGC00125: { nama: "AZURA AZIAN", status: "LULUS" },
+            TGC00126: { nama: "ORLIN ADILAH RAHIL", status: "LULUS" },
+            TGC00127: { nama: "SHAFA ARTIQAH SARI", status: "LULUS" },
+            TGC00128: { nama: "JEAN MARYAMAURYLOV LUCIANO", status: "LULUS" },
+            TGC00129: { nama: "AIRA ANASTASYA PUTRI", status: "LULUS" },
+            TGC00130: { nama: "RAYYA DWI SYAFITRI", status: "LULUS" },
+            TGC00131: { nama: "CANTIKA NUR AQILLAH", status: "LULUS" },
+            TGC00132: { nama: "MUHAMMAD NAUFAL", status: "LULUS" },
+            TGC00133: { nama: "JONATHAN FEBRIAND SIRAIT", status: "LULUS" },
+            TGC00134: { nama: "TIRZHA SANDIORIVA", status: "LULUS" },
+            TGC00135: { nama: "MAESYA DWI SYAHRINI", status: "LULUS" },
+            TGC00136: { nama: "ZAIDAN FURQON AL FIKRI", status: "LULUS" },
+            TGC00137: { nama: "M.DIAS ANUGRAH", status: "LULUS" },
+            TGC00138: { nama: "VARENO OKA LISANDI", status: "LULUS" },
+            TGC00139: { nama: "IMELDA SAFITRI", status: "LULUS" },
+            TGC00140: { nama: "JIBRIL JOSYAN KABIR", status: "LULUS" },
+            TGC00141: { nama: "HAFIDH AHMAD", status: "LULUS" },
+            TGC00142: { nama: "RHATU NAZYWA AIRA", status: "LULUS" },
+            TGC00143: { nama: "CHERIAVANI RIZKIKA SYAHPUTRI", status: "LULUS" },
+            TGC00144: { nama: "FEBY ANGGRAINI PUTRI S.", status: "LULUS" },
+            TGC00145: { nama: "PRAYOGA HASYIM", status: "LULUS" },
+            TGC00146: { nama: "BRAGER BANDERAS", status: "LULUS" },
+            TGC00147: { nama: "MAULIDA FEBRIANI", status: "LULUS" },
+            TGC00148: { nama: "WEA AZKA", status: "LULUS" },
+            TGC00149: { nama: "RAHEES IRWAN FEBRIANTO NENGGOLAN",status: "LULUS"},
+            TGC00150: { nama: "E. SINGLIN", status: "LULUS" },
+            TGC00151: { nama: "PATRICIA AGUSTIANI", status: "LULUS" },
+            TGC00152: { nama: "RAMA ARTHA PRADANA", status: "LULUS" },
+            TGC00153: { nama: "ALEA MIRABHEL", status: "LULUS" },
+            TGC00154: { nama: "ZAFIKA ADELIA ANUGERAH BINTAN",status: "LULUS"},
+            TGC00155: { nama: "NUR SHAHADA DWIPUTRI ASTUTI & AZLAN",status: "LULUS"},
+            TGC00156: { nama: "META LESTARI HARDIYANTI", status: "LULUS" },
+            TGC00157: { nama: "MOHAMMAD HAFIZH ILHAM", status: "LULUS" },
+            TGC00158: { nama: "RAYSHA WULAN DESMAWATI", status: "LULUS" },
+            TGC00159: { nama: "BANYU VIKRY OKTABRIAN", status: "LULUS" },
+            TGC00160: { nama: "ANANDA PUTRI YURI BINTANI SARAGIH",status: "LULUS"},
+            TGC00161: { nama: "NADIRA CITRA MULYASARI", status: "LULUS" },
+            TGC00162: { nama: "SYAFIRA", status: "LULUS" },
+            TGC00163: { nama: "AIRA ANGGUN FERNANTA", status: "LULUS" },
+            TGC00164: { nama: "NABIL ATHAILLAH MISUDHA", status: "LULUS" },
+            TGC00165: { nama: "SARAH DWI ANNISA", status: "LULUS" },
+            TGC00166: { nama: "KAILA MAILAN SARI", status: "LULUS" },
+            TGC00167: { nama: "FAIZA WIDYA KIRANA ALIM ",status: "LULUS"},
+            TGC00168: { nama: "AISHA AR-RANTISI ARDIE", status: "LULUS" },
+            TGC00169: { nama: "HAFIQAH ANISSA KINANTI PUTRI", status: "LULUS" },
+            TGC00170: { nama: "EMILY", status: "LULUS" },
+            TGC00171: { nama: "APRILIA EKA MULYA", status: "LULUS" },
+            TGC00172: { nama: "LOLITA", status: "LULUS" },
+            TGC00173: { nama: "ADINDA LARAS", status: "LULUS" },
+            TGC00174: { nama: "M.FEBRI KURNIAWAN", status: "LULUS" },
+            TGC00175: { nama: "TIARA CINTA TIAS", status: "LULUS" },
+            TGC00176: { nama: "TRI SAPUTRA SITOHANG", status: "LULUS" },
+            TGC00177: { nama: "KINANTI KUSUMASTUTI MAHARANI", status: "LULUS" },
+            TGC00178: { nama: "ABDUL ROBBY SAPUTRA", status: "LULUS" },
+            TGC00179: { nama: "NURA SYIEFHA", status: "LULUS" },
+            TGC00180: { nama: "RIFIA RESPIANI", status: "LULUS" },
+            TGC00181: { nama: "PAREL ERIZA APRILDIANSYAH", status: "LULUS" },
+            TGC00182: { nama: "SYAHRANI PUTRI AULIA", status: "LULUS" },
+            TGC00183: { nama: "DANIEL MORENO", status: "LULUS" },
+            TGC00184: { nama: "IQBAL SYAHPUTRA", status: "LULUS" },
+            TGC00185: { nama: "AL FANDI IQSAN", status: "LULUS" },
+            TGC00186: { nama: "DENIES FEBRIANDA", status: "LULUS" },
+            TGC00187: { nama: "ADINDA UGAHARI PUTRI AMIDA", status: "LULUS" },
+            TGC00188: { nama: "NOVIA PUTRI NURHIDAYATI", status: "LULUS" },
+            TGC00189: { nama: "RONI SAPUTRA", status: "LULUS" },
+            TGC00190: { nama: "LA ODE SULAIMAN", status: "LULUS" },
+            TGC00191: { nama: "M.JAUHAR QOLBY", status: "LULUS" },
+            TGC00192: { nama: "MAR'ATU SOLIHATUN", status: "LULUS" },
+            TGC00193: { nama: "AYU WARTIKASARI", status: "LULUS" },
+            TGC00194: { nama: "ALDHILLAN WIYANG PANGESTU", status: "LULUS" },
+            TGC00195: { nama: "ONY YUNAN UKHRAWI", status: "LULUS" },
+            TGC00196: { nama: "ERVIN ARDINA", status: "LULUS" },
+            TGC00197: { nama: "ATIKA PRILLIANA TANIA", status: "LULUS" },
+            TGC00198: { nama: "DZEKO SAFARAZ HARIFAN", status: "LULUS" },
+            TGC00199: { nama: "QUINSHA ALIKA FARAHITA", status: "LULUS" },
+            TGC00200: { nama: "SAFA AYU SAFITRI", status: "LULUS" },
+            TGC00201: { nama: "PENDY SETIAWANSYAH", status: "LULUS" },
+            TGC00202: { nama: "DIGO BRAMALDO TAKBIRANTO", status: "LULUS" },
+            TGC00203: { nama: "ROBY SAHPUTRA", status: "LULUS" },
+            TGC00204: { nama: "OGGY ARLIANSYAH", status: "LULUS" },
+          };
+        }
+      }
+
+      // Find student by name or ID
+      function findStudent(input) {
+        // First try to find by name
+        for (const key in students) {
+          if (students[key].nama.toLowerCase() === input.toLowerCase()) {
+            return { ...students[key], id: key };
+          }
+        }
+        // Then try to find by ID
+        if (students[input]) {
+          return { ...students[input], id: input };
+        }
+        return null;
+      }
+
+      // Handle form submission
+      document
+        .getElementById("cek-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const input = document.getElementById("input").value.trim();
+          const errorDiv = document.getElementById("error");
+          const successDiv = document.getElementById("success");
+          const submitBtn = document.getElementById("submit-btn");
+
+          // Hide previous messages
+          errorDiv.style.display = "none";
+          successDiv.style.display = "none";
+
+          if (!input) {
+            errorDiv.textContent = "Silakan masukkan nama atau ID peserta.";
+            errorDiv.style.display = "block";
+            errorDiv.style.animation = "shake 0.5s ease-in-out";
+            return;
+          }
+
+          // Show loading state
+          submitBtn.classList.add("loading");
+          submitBtn.textContent = "Mencari...";
+
+          loadStudentsFromStorage();
+          const student = findStudent(input);
+
+          // Simulate processing time for better UX
+          setTimeout(() => {
+            if (student) {
+              if (student.status === "LULUS") {
+                successDiv.textContent = `Selamat ${student.nama}! Anda LULUS! Mengalihkan ke halaman detail...`;
+                successDiv.style.display = "block";
+
+                // Redirect to student-detail.html with student name
+                setTimeout(() => {
+                  window.location.href = `student-detail.html?name=${encodeURIComponent(
+                    student.nama
+                  )}`;
+                }, 1500);
+              } else {
+                successDiv.textContent = `Data ditemukan! Mengalihkan ke halaman detail ${student.nama}...`;
+                successDiv.style.display = "block";
+
+                // Redirect to separate page for TIDAK LULUS students
+                setTimeout(() => {
+                  window.location.href = `student-tidak-lulus.html?name=${encodeURIComponent(
+                    student.nama
+                  )}`;
+                }, 1500);
+              }
+            } else {
+              submitBtn.classList.remove("loading");
+              submitBtn.textContent = "🔍 Cek Kelulusan";
+              errorDiv.textContent =
+                "Data tidak ditemukan. Pastikan nama atau ID sudah benar.";
+              errorDiv.style.display = "block";
+              errorDiv.style.animation = "shake 0.5s ease-in-out";
+            }
+          }, 800);
+        });
+
+      // Load data on page load
+      document.addEventListener("DOMContentLoaded", function () {
+        loadStudentsFromStorage();
+        startBackgroundMusic();
+      });
+
+      // Start background music
+      function startBackgroundMusic() {
+        const bgMusic = document.getElementById('bg-music');
+        if (bgMusic) {
+          // Force autoplay with multiple attempts
+          const playPromise = bgMusic.play();
+          if (playPromise !== undefined) {
+            playPromise.then(() => {
+              console.log('Background music started successfully');
+            }).catch((error) => {
+              console.log('Autoplay blocked, trying alternative methods');
+              // Try to play on user interaction
+              document.addEventListener('click', function playOnClick() {
+                bgMusic.play();
+                document.removeEventListener('click', playOnClick);
+              }, { once: true });
+            });
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
